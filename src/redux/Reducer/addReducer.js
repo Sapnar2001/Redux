@@ -1,24 +1,9 @@
 import {ADD_TODO, DELETE_DATA, EDIT_DATA} from '../Action/addAction';
 const INITIAL_STATE = {
   List: {
-    All: [
-      {
-        id: 1,
-        title: 'groceries',
-      },
-    ],
-    Work: [
-      {
-        id: 5,
-        title: 'assignents',
-      },
-    ],
-    Personal: [
-      {
-        id: 3,
-        title: 'shopping',
-      },
-    ],
+    All: [],
+    Work: [],
+    Personal: [],
   },
 };
 export const addReducer = (state = INITIAL_STATE, action) => {

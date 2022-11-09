@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import React from 'react';
 data = [
-  {title1: 'All', title2: 'Schedule'},
-  {title1: 'Personal', title2: 'Erands'},
-  {title1: 'Work', title2: 'Projects'},
+  {title1: 'All', title2: 'Schedule',img:require('../asset/all.png'),},
+  {title1: 'Personal', title2: 'Erands',img:require('../asset/person.png')},
+  {title1: 'Work', title2: 'Projects',img:require('../asset/work.png')},
 ];
 export default  function Home(props){
   const {navigation} = props 
@@ -35,8 +35,11 @@ export default  function Home(props){
               // console.log('item===========>',item)
               const {title1} = item
               return (
-                <View>
+                <View style={styles.boxView} >
                   <TouchableOpacity style={styles.mainView} onPress= {() =>handleButtonClick(title1)}>
+                  <Image
+                   source={item.img}
+                  />
                     <Text style={styles.mainText}>{item.title1}</Text>
                     <Text style={styles.mainText}>{item.title2}</Text>
                   </TouchableOpacity>
@@ -71,14 +74,19 @@ const styles = StyleSheet.create({
   },
   mainView: {
     height: 150,
-    width: 200,
+    width: 180,
     borderWidth: 1,
-    borderColor: 'grey',
-    backgroundColor: 'white',
+    borderColor: 'white',
+    borderRadius:10,
+    backgroundColor: 'grey',
     alignItems: 'center',
     justifyContent: 'center',
   },
   mainText: {
     fontSize: 20,
   },
+  boxView:{
+    padding:7,
+  }
+
 });
