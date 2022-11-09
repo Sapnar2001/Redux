@@ -8,68 +8,88 @@ import {
   FlatList,
 } from 'react-native';
 import React from 'react';
-import {connect, useSelector, useDispatch} from 'react-redux';
-import addReducer from '../redux/Reducer/addReducer';
-import {deletedata, editdata} from '../redux/Action/addAction';
-import ScreenThree from './ScreenThree';
+import {connect} from 'react-redux';
+import {deletedata, AddTodo} from '../redux/Action/addAction';
+// import ScreenThree from './ScreenThree';
 
-const ScreenTwo = ({route, navigation}) => {
-  console.log('routes==========>', route);
-  const dispatch = useDispatch();
-  const {List} = useSelector(state => state.addReducer);
-  const {type} = route.params;
-  console.log(List[type]);
-  console.log(route);
+export class ScreenTwo extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  const handleButton = route => {
-    navigation.navigate('ScreenThree', {type});
+  handleButton = type => {
+    this.props.navigation.navigate('ScreenThree', {type});
   };
-  const deleteHandler = key => {
+  editHandler=(item,type)=>{
+    this.props.navigation.navigate('ScreenThree',{type,item,edit:true})
+  }
+  deleteHandler=id=>{
+    const {
+      List,
+    route:{
+      params:{type},
+    },}=this.props;
     const prevData = List[type];
-    console.log('prevData======>', prevData);
-    const newData = prevData.filter(element => element.key !== key);
-    dispatch(deletedata(newData, type));
+    const newData = prevData.filter(ele => ele.id != id);
+    console.log('newwwwwwwwwww====================', newData);
+    this.props.deletedata(newData, type);
+  }
+  render() {
+    const {
+      List,
+      route: {
+        params: {type},
+      },
+    } = this.props;
+    console.log('second===========>',List[type]);
+    return (
+      <View style={{flex: 1}}>
+        {
+          List[type]?.map(item => {
+            console.log('item============>',item)
+            return (
+              <View style={styles.showView}>
+                <Text style={StyleSheet.showText}>{item.title}</Text>
+                <Text style={StyleSheet.showText}>{item.sub}</Text>
+                <TouchableOpacity onPress={() => this.deleteHandler(item.id)}>
+                  <Image
+                    source={require('../asset/del.png')}
+                    style={styles.delImg}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>this.editHandler(item,type)}>
+                  <Image
+                    source={require('../asset/edit.png')}
+                    style={styles.editImg}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={()=>this.handleButton(type)}>
+          <Image
+            source={{
+              uri: 'https://cdn0.iconfinder.com/data/icons/round-ui-icons/512/add_red.png',
+            }}
+            style={styles.img}
+          />
+        </TouchableOpacity>
+      </View>
+);}}
+const mapStateToProps = state => {
+  return {
+    List: state.addReducer,
   };
-
-  const editHandler = (item, type) => {
-    navigation.navigate('ScreenThree', {item, type, edit: true});
-  };
-
-  return (
-    <View style={{flex: 1}}>
-      {List &&
-        List[type]?.map(item => {
-          return (
-            <View style={styles.showView}>
-              <Text style={StyleSheet.showText}>{item.id}</Text>
-              <Text style={StyleSheet.showText}>{item.title}</Text>
-              <TouchableOpacity onPress={() => deleteHandler(item.key)}>
-                <Image
-                  source={require('../asset/del.png')}
-                  style={styles.delImg}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => editHandler(item, type)}>
-                <Image
-                  source={require('../asset/edit.png')}
-                  style={styles.editImg}
-                />
-              </TouchableOpacity>
-            </View>
-          );
-        })}
-
-      <TouchableOpacity style={styles.button} onPress={handleButton}>
-        <Image
-          source={{
-            uri: 'https://cdn0.iconfinder.com/data/icons/round-ui-icons/512/add_red.png',
-          }}
-          style={styles.img}
-        />
-      </TouchableOpacity>
-    </View>
-  );
 };
+const mapDispatchToProps = {
+  AddTodo,
+  deletedata,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScreenTwo);
+
 const styles = StyleSheet.create({
   button: {width: 70, height: 70, bottom: 10, right: 10, position: 'absolute'},
   img: {
@@ -112,4 +132,3 @@ const styles = StyleSheet.create({
     width: 39,
   },
 });
-export default ScreenTwo;

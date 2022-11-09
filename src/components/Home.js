@@ -1,6 +1,5 @@
 import {
   SafeAreaView,
-  ScrollView,
   Text,
   View,
   StyleSheet,
@@ -15,10 +14,10 @@ data = [
   {title1: 'Work', title2: 'Projects',img:require('../asset/work.png')},
 ];
 export default  function Home(props){
-  const {navigation} = props 
 
-  const handleButtonClick = (nav) => {
-    props.navigation.navigate('ScreenTwo',{type:String(nav)});
+  const handleButtonClick = (type) => {
+    props.navigation.navigate('ScreenTwo',{type});
+    console.log('type==============================>',type)
   }
 
     return (
@@ -27,13 +26,14 @@ export default  function Home(props){
           <Text style={styles.HelloText}>Hello</Text>
           <Text style={styles.Text}>Sapna</Text>
         </View>
-        <View  style = {{marginTop: 30}}>
+        <View style = {{marginTop: 30}}>
           <FlatList
             numColumns={2}
             data={data}
             renderItem={({item}) => {
-              // console.log('item===========>',item)
+              console.log('item===========>',item)
               const {title1} = item
+              console.log(title1)
               return (
                 <View style={styles.boxView} >
                   <TouchableOpacity style={styles.mainView} onPress= {() =>handleButtonClick(title1)}>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 40,
     color: 'blue',
-    letterSpacing: 5,
+    letterSpacing: 3,
     marginHorizontal: 30,
   },
   mainView: {

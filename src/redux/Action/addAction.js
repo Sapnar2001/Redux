@@ -1,7 +1,6 @@
 export const ADD_TODO = 'ADD_TODO';
 export const DELETE_DATA='DELETE_DATA';
 export const EDIT_DATA='EDIT_DATA';
-// export const REMOVE_TODO = 'REMOVE_TODO';
 
 export const AddTodo = (List,type)=> {
     return{
