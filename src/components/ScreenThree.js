@@ -1,69 +1,95 @@
-// import { Text, TextInput, TouchableOpacity, View } from 'react-native'
-// import React, { Component } from 'react'
-
-// export class ScreenThree extends Component {
-//   render() {
-//     return (
-//       <View style={{flex:1}}>
-//         <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-//         <Text>Personal Erands</Text>
-//         </View>
-//         <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-//         <TextInput placeholder="TITLE" />
-//         </View>
-//         <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-//         <TextInput placeholder="DATE AND TIME"/>
-//         </View>
-//         <TouchableOpacity style={{backgroundColor:'red' ,margin:12 ,borderRadius:100}}>
-//             <Text style={{color:'white',padding:20, alignSelf:'center'}}> ADD TASK</Text>
-//         </TouchableOpacity>
-//       </View>
-//     )
-//   }
-// }
-
-// export default ScreenThree
 
 
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import {AddTodo,editdata } from '../redux/Action/addAction';
 import {
   Text,
   View,
   TextInput,
-  Button,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
-const ScreenThree=()=>{
-  const [todoValue, setTodoValue] = useState('');
-  // const dispatch = useDispatch();
-  const data = useSelector(state => state);
-  // const todos = data.todos.todos;
-  // const addTodo = () => {
-  //   if (todos && !todos.includes(todoValue)) {
-  //     dispatch(AddTodo(todoValue));
-  //     setTodoValue('');
-  //   } else {
-  //     alert(`${todoValue} already added in Todo List`);
-  //   }
-  // };
-  return(
-          <View style={{flex:1}}>
-        <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-        <Text>Personal Erands</Text>
-        </View>
-        <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-        <TextInput placeholder="TITLE"  onChangeText={setTodoValue}
-        value={todoValue} />
-        </View>
-        <View style={{borderBottomColor:'grey', borderWidth:2,padding:20, margin:12 }}>
-        <TextInput placeholder="DATE AND TIME"/>
-        </View>
-        <TouchableOpacity style={{backgroundColor:'red' ,margin:12 ,borderRadius:100}} onPress={addTodo}>
-            <Text style={{color:'white',padding:20, alignSelf:'center'}}> ADD TASK</Text>
-        </TouchableOpacity>
+import ScreenTwo from './ScreenTwo';
+const ScreenThree = ({route}) => {
+  console.log('roiuyytrd=========>', route)
+  const {type} = route.params;
+  const {edit}=route.params
+  console.log('edit====>',edit)
+  const {List} = useSelector(state => state.addReducer);
+  const [todoValue, setTodoValue] = useState();
+  const [ID, setID] = useState();
+  const dispatch = useDispatch();
+
+  const handleeSubmit = () => {
+    // dispatch(AddTodo([...List[type], {title: todoValue, id:ID}], type));
+    if(edit){
+      const prevData = List[type];
+      const newData=prevData.map(ele=>{
+        if(ele.id===ID){
+          return{
+            ...ele,
+            title:todoValue,
+          }
+         } else{
+            return ele;
+          }
+      })
+      dispatch(editdata(newData, type));
+    }else 
+    {
+      dispatch(AddTodo([...List[type], {title: todoValue,id:ID}], type))
+  }
+  };
+  
+  
+
+  return (
+    <View style={{flex: 1}}>
+      <View style={{
+          borderBottomColor: 'grey',
+          borderWidth: 2,
+          padding: 20,
+          margin: 12,
+        }}>
+        <Text>{type}</Text>
       </View>
-  )
-}
+      <View
+        style={{
+          borderBottomColor: 'grey',
+          borderWidth: 2,
+          padding: 20,
+          margin: 12,
+        }}>
+        <TextInput placeholder="ID"
+        onChangeText={val=>{
+setID(val);
+        }}
+        />
+      </View>
+      <View
+        style={{
+          borderBottomColor: 'grey',
+          borderWidth: 2,
+          padding: 20,
+          margin: 12,
+        }}>
+        <TextInput
+          placeholder="TITLE"
+          onChangeText={val => {
+            setTodoValue(val);
+          }}
+          value={todoValue}
+        />
+      </View>
+      
+      <TouchableOpacity
+        style={{backgroundColor: 'red', margin: 12, borderRadius: 100}}
+        onPress={handleeSubmit}>
+        <Text style={{color: 'white', padding: 20, alignSelf: 'center'}}>
+          ADD TASK
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 export default ScreenThree;

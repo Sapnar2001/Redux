@@ -6,15 +6,21 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Image
 } from 'react-native';
-import React, {Component} from 'react';
+import React from 'react';
 data = [
   {title1: 'All', title2: 'Schedule'},
   {title1: 'Personal', title2: 'Erands'},
-  {title1: 'work', title2: 'Projects'},
+  {title1: 'Work', title2: 'Projects'},
 ];
-export class Home extends Component {
-  render() {
+export default  function Home(props){
+  const {navigation} = props 
+
+  const handleButtonClick = (nav) => {
+    props.navigation.navigate('ScreenTwo',{type:String(nav)});
+  }
+
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.MainView}>
@@ -26,12 +32,15 @@ export class Home extends Component {
             numColumns={2}
             data={data}
             renderItem={({item}) => {
+              // console.log('item===========>',item)
+              const {title1} = item
               return (
                 <View>
-                  <TouchableOpacity style={styles.mainView} onPress={() => this.props.navigation.navigate('ScreenTwo')} navigation={this.props.navigation}>
+                  <TouchableOpacity style={styles.mainView} onPress= {() =>handleButtonClick(title1)}>
                     <Text style={styles.mainText}>{item.title1}</Text>
                     <Text style={styles.mainText}>{item.title2}</Text>
                   </TouchableOpacity>
+         
                 </View>
               );
             }}
@@ -40,7 +49,6 @@ export class Home extends Component {
       </SafeAreaView>
     );
   }
-}
 const styles = StyleSheet.create({
   MainView: {
     // top:40,
@@ -74,4 +82,3 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-export default Home;
